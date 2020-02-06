@@ -1,0 +1,100 @@
+var funciones={
+		
+		inicio : function(){
+			$('#table').bootstrapTable({
+				url: '/${entity.name}/LeerAll',
+				sidePagination: 'server',
+				pageSize: 5,
+				pagination:true,	
+				search : true,
+				searchAlign : 'left'
+			});
+		},
+		abrirForm : function(data){
+				bootbox.dialog({
+				title:"Formulario",
+				message: "<form id='form'>" +$('#divFormulario').html()+ "</form>",
+				buttons:{
+					b1:{
+						label:"Guardar",
+						className:"btn-primary",
+						callback: function(){
+							funciones.guardar();
+						}
+					},
+					b2:{
+						label:"Cerrar",
+						className:"btn-secundary",
+					}
+				}
+			});
+				if (data!=null){
+					$('#form').deserialize(data);
+				}
+		},
+		guardar : function(){
+			$.post({
+				url:"/${entity.name}/Guardar",
+				data: $('#form').serialize(),
+				success: function(json){
+					if(json.error!=null){
+						bootbox.alert(json.error)
+					}
+					$('#table').bootstrapTable('refresh')
+				},
+				error : function(){
+					bootbox.alert("No hay conexion con servidor");
+				}
+			})
+		},
+		borrar: function(id){
+			$.getJSON({
+				url:"/${entity.name}/BorrarID",
+				data:{
+					id : id
+				},
+				success: function(json){
+					if(json.error!=null){
+						bootbox.alert(json.error)
+					}
+					$('#table').bootstrapTable('refresh')
+				},
+				error : function(){
+					bootbox.alert("No hay conexion con servidor");
+				}
+			})
+		},
+		editar : function(id){
+			$.getJSON({
+				url:"/${entity.name}/LeerID",
+				data:{
+					id : id
+				},
+				success: function(json){
+					if(json.error!=null){
+						bootbox.alert(json.error)
+					}
+					if(json.data!=null){
+						funciones.abrirForm(json.data);
+					}
+				},
+				error : function(){
+					bootbox.alert("No hay conexion con servidor");
+				}
+			})
+		},
+		formatear:function(value,row, index){
+			return "<input type='button' onclick='funciones.borrar("+ row.id +")' class='btn btn-danger' value='Borrar'/>" +
+			      "<input type='button' onclick='funciones.editar("+ row.id +")' class='btn btn-success' value='Editar'/>";
+		}
+}
+
+			
+
+
+$(document).ready(function(){
+	funciones.inicio();
+	$("#btnInsert").on("click", function(){
+		funciones.abrirForm();
+	})
+});

@@ -1,0 +1,11 @@
+// Entity Productos
+
+Productos {
+	id : long {@Id, @ObjectType};
+  	nombre : string ;
+  	seccion : string ;
+  	proveedor : string ;
+  	stock : int ;
+  	precio : double ; 
+  	fecha : date;
+}

@@ -1,0 +1,11 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+#foreach ($entity in $selectedEntities)
+      <a class="navbar-brand" href="/${entity.name}/Vista">
+        <p class="navbar-text" >${entity.name}</p>
+      </a>
+#end
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,25 @@
+package ${ROOT_PKG}.pojos;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.util.Date;
+
+public class Filtro${entity.name}Pojo {
+#foreach($field in $entity.attributes )
+#if($field.type=="String"|| $field.type=="Date" ||
+	$field.type=="Integer" || $field.name=="Long" ||
+	$field.type=="Double" || $field.name=="Float")
+	
+	#if($field.type=="Date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	#end
+	private ${field.type} ${field.name}Filtro;	
+	
+	public ${field.type} ${field.getter}Filtro() {
+		return ${field.name}Filtro;
+	}
+
+	public void ${field.setter}Filtro(${field.type} ${field.name}Filtro) {
+		this.${field.name}Filtro = ${field.name}Filtro;
+	}
+#end
+#end
+}

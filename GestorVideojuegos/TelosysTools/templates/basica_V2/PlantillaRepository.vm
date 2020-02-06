@@ -1,0 +1,23 @@
+package ${ROOT_PKG}.repositories;
+
+import ${ROOT_PKG}.entities.${entity.name}Entity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+public interface ${entity.name}Repository extends JpaRepository<${entity.name}Entity, Long>{
+
+		#set($nombre = "")
+		#set($params = "")
+		#set($or ="") 
+		#foreach($field in $entity.attributes)
+			#if($field.type == "String")
+				#set($nombre = $nombre +$or +$fn.firstCharToUpperCase($field.name) + "Containing")	
+				#set($params = $params + "String $field.name,")
+				#set($or= "Or")
+			#end
+			#end
+
+		public Page<${entity.name}Entity> findBy${nombre}AllIgnoreCase(${params} Pageable page);
+
+}

@@ -1,0 +1,49 @@
+package ${ROOT_PKG}.services;
+
+
+import java.util.Optional;
+
+import ${ROOT_PKG}.entities.${entity.name}Entity;
+import ${ROOT_PKG}.repositories.${entity.name}Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
+import org.springframework.stereotype.Service;
+import ${ROOT_PKG}.pojos.Filtro${entity.name}Pojo;
+
+@Service
+public class ${entity.name}Service implements I${entity.name}Service{
+
+	@Autowired
+	private ${entity.name}Repository repositorio;
+	
+	public Page<${entity.name}Entity> leerTodo(Filtro${entity.name}Pojo filtro, Pageable pagina) throws Exception{
+		#set($params = "")
+		#foreach($field in $entity.attributes)
+			#if($field.type=="String" || $field.type=="Date" || $field.type=="Integer" || $field.name=="Long" ||
+	$field.type=="Double" || $field.name=="Float")
+				#set($params = $params + "filtro.get$fn.firstCharToUpperCase($field.name)Filtro(),")
+			#end
+			#end
+	
+			return repositorio.filtro(${params} pagina);
+}	
+	public ${entity.name}Entity leer(Long id) throws Exception{
+		Optional<${entity.name}Entity> obj=repositorio.findById(id);
+		if(obj.isPresent()) {
+			return obj.get();
+		}else {
+			throw new Exception("Registro no existe");
+		}
+		
+		
+	}
+	
+	public void guardar (${entity.name}Entity entidad) {
+		repositorio.save(entidad);
+		
+	}
+	
+	public void borrar(Long id) {
+		repositorio.deleteById(id);
+	}
+}

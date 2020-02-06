@@ -1,0 +1,60 @@
+package ${target.javaPackageFromFolder(${SRC})};
+
+import java.util.Date;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import ${ROOT_PKG}.JsonFecha;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@Entity
+@Table(name="${entity.name}")
+public class ${entity.name}Entity {
+#foreach($field in $entity.attributes )
+
+#if($field.isKeyElement())
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private $field.type $field.name ;
+	
+	public $field.type ${field.getter}() {
+		return $field.name;
+	}
+
+	public void ${field.setter}($field.type $field.name) {
+		this.$field.name = $field.name;
+	}
+	
+	#elseif($field.type  == "Date")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonSerialize(using = JsonFecha.class)
+	private Date $field.name;
+
+	public Date  ${field.getter}() {
+		return $field.name;
+	}
+
+	public void ${field.setter}(Date $field.name) {
+		this.$field.name =$field.name;
+	}
+
+	
+#else
+	private $field.type $field.name;
+	
+	public $field.type ${field.getter}() {
+		return $field.name;
+	}
+
+	public void ${field.setter}($field.type $field.name) {
+		this.$field.name = $field.name;
+	}
+	#end
+	#end
+}

@@ -1,0 +1,16 @@
+package ${ROOT_PKG}.services;
+
+import ${ROOT_PKG}.entities.${entity.name}Entity;
+import ${ROOT_PKG}.pojos.Filtro${entity.name}Pojo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+public interface I${entity.name}Service {
+
+	public Page<${entity.name}Entity> leerTodo(Filtro${entity.name}Pojo filtro,Pageable pagina) throws Exception;
+	public ${entity.name}Entity leer(Long id) throws Exception;
+	public void guardar (${entity.name}Entity entidad);	
+	public void borrar(Long id) ;
+	
+}
+	

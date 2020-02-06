@@ -1,0 +1,106 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+#set ($d = "${ ")
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>${entity.name}</title>
+<%@ include file="includes/IncludeHead.jsp" %>
+</head>
+<body>
+	<%@ include file="includes/IncludeBody.jsp" %>
+	<div class="container">
+		<h3>${entity.name}</h3>
+		
+		<input id="btnInsert" type="button" class="btn btn-primary" value="nuevo"/>
+		<input id="btnBusquedaAvanzada" type="button" class="btn btn-primary" value="Busqueda Avanzada"/>
+		<div id="Avanzada" style="display: none">
+#foreach($field in $entity.attributes )
+#if($field.type=="String")
+		<div class="form-group">
+			<input id="${field.name}Filtro" name="${field.name}Filtro" class="form-control" placeholder="Introduce $field.name"/>
+		</div>
+#elseif($field.type=="Date")		
+		<div class="form-group">
+			<input id="${field.name}Filtro" type="date" name="${field.name}Filtro" class="form-control" placeholder="Introduce $field.name"/>
+		</div>
+#elseif($field.type=="Integer" || $field.name=="Long" )		
+		<div class="form-group">
+			<input id="${field.name}Filtro"  type="number" name="${field.name}Filtro" class="form-control" placeholder="Introduce $field.name"/>
+		</div>
+#elseif($field.type=="Double" || $field.name=="Float" )		
+		<div class="form-group">
+			<input id="${field.name}Filtro"  type="number" name="${field.name}Filtro" class="form-control" placeholder="Introduce $field.name"/>
+		</div>		
+#end
+#end
+		<input id="btnBuscar" type="button" class="btn btn-primary" value="buscar"/>
+		</div>
+		<table id="tabla${entity.name}">
+			<thead>
+				<tr>
+					<th data-formatter="funciones.formatear"></th>
+#foreach($field in $entity.attributes )
+					<th data-field="$field.name" data-sortable="true">$field.name</th>
+#end
+				</tr>
+			</thead>
+		</table>
+	</div>
+
+	<div id="divFormulario" style="display:none">
+<!-- 		<div class="form-group"> -->
+<!-- 			<label for="description">Descripcion</label> -->
+<!-- 			<input id="description" name="description" class="form-control"/> -->
+<!-- 		</div>	 -->
+<!--		Como hacer select -->
+<!--		<select id="id" name="id" class="form-control"> -->
+<!--			<option value="valor">valor</option> -->
+<!--			<option value="valor">valor</option> -->
+<!--		</select>-->
+<!--		como hacer text Area-->
+<!--<textarea id="id" name="id" class="form-control rounded-0" rows="3"></textarea> -->
+
+		<input name="${d}_crsf.parameterName}" value="${d}_crsf.token}" type="hidden" />
+
+#foreach($field in $entity.attributes )
+#if($field.isKeyElement())
+		<input id="$field.name" name="$field.name" type="hidden"/>
+#elseif($field.name=="email")		
+		<div class="form-group">
+			<input id="$field.name" type="email" name="$field.name" class="form-control" placeholder="Introduce $field.name"/>
+		</div>
+#elseif($field.name=="password" || $field.name=="contraseña" )
+		<div class="form-group">
+			<input id="$field.name" name="$field.name" class="form-control" placeholder="Introduce $field.name"/>
+		</div>
+
+#elseif($field.type=="String")
+		<div class="form-group">
+			<input id="$field.name" name="$field.name" class="form-control" placeholder="Introduce $field.name"/>
+		</div>
+#elseif($field.type=="Date")		
+		<div class="form-group">
+			<input id="$field.name" type="date" name="$field.name" class="form-control" placeholder="Introduce $field.name"/>
+		</div>
+#elseif($field.type=="Integer" || $field.name=="Long" )		
+		<div class="form-group">
+			<input id="$field.name"  type="number" name="$field.name" class="form-control" placeholder="Introduce $field.name"/>
+		</div>
+#elseif($field.type=="Double" || $field.name=="Float" )		
+		<div class="form-group">
+			<input id="$field.name"  type="number" name="$field.name" class="form-control" placeholder="Introduce $field.name"/>
+		</div>
+#elseif($field.type=="Boolean")		
+		<div class="form-group">
+			<input id="$field.name" type="checkbox" name="$field.name" class="form-control" placeholder="Introduce $field.name"/>
+		</div>				
+#end
+#end	
+	</div>	
+<%@ include file="includes/IncludeFoot.jsp" %>
+<script src="/js/${entity.name}.js"></script>
+</body>
+
+</html>

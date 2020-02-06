@@ -1,0 +1,31 @@
+package ${ROOT_PKG}.repositories;
+
+import ${ROOT_PKG}.entities.${entity.name}Entity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import java.util.Date;
+
+public interface ${entity.name}Repository extends JpaRepository<${entity.name}Entity, Long>{
+		
+		#set($sql = "")
+		#set($params = "")
+		#set($and =" where ") 
+		#foreach($field in $entity.attributes)
+			#if($field.type == "String")
+				#set($sql = $sql +$and +"a." +$field.name + " like %:" + ${field.name} + "%" )	
+				#set($params = $params + $field.type + " " + $field.name + ",")
+				#set($and=" and ")
+			#elseif( $field.type=="Date" ||	$field.type=="Integer" || $field.name=="Long" ||
+			$field.type=="Double" || $field.name=="Float")
+				#set($sql = $sql +$and +"(a." + $field.name +" =  :" + ${field.name} +" or :"+  ${field.name} + " is null)" )	
+				#set($params = $params + $field.type + " " + $field.name + ",")	
+				#set($and=" and ")
+			#end
+		#end
+
+		@Query("select a from ${entity.name}Entity a ${sql} ")
+		public Page<${entity.name}Entity> filtro(${params} Pageable page);
+
+}
